@@ -1,3 +1,4 @@
+import csv
 import googlemaps
 
 class RouteOptimizer:
@@ -20,16 +21,27 @@ class RouteOptimizer:
         else:
             return None
 
-api_key = ''
-addresses = []
+def read_addresses_from_csv(file_path):
+    addresses = []
+    with open(file_path, 'r') as csvfile:
+        csvreader = csv.reader(csvfile)
+        for row in csvreader:
+            addresses.append(row[0])
+    return addresses
 
+api_key = ''
+csv_file_path = 'addresses.csv'  # Replace with your CSV file path
+
+addresses = read_addresses_from_csv(csv_file_path)
 start_address = ''
 
 route_optimizer = RouteOptimizer(api_key)
 optimized_route = route_optimizer.optimize_route(addresses, start_address)
 
 if optimized_route:
-    print("Optimized Route:", optimized_route)
+    print("Optimized Route:")
+    for address in optimized_route:
+        print(address)
 else:
     print("Error: Unable to optimize the route.")
 
